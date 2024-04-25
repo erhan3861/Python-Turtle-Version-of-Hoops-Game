@@ -5,7 +5,7 @@ https://youtu.be/KS89KD91Vzs?si=mAyGvYchlf1EbMmw
 
 Game Controls :
 
-s key for shooting
+s key for shooting \n
 r key for reset the shooting
 n key for new shooting
 
