@@ -7,7 +7,7 @@ import random
 screen = turtle.Screen()
 screen.title("🏀 Basketball AI 🏀")
 screen.addshape("basketball.gif")
-screen.addshape("target2.gif")
+screen.addshape("target.gif")
 screen.addshape("rim.gif")
 screen.tracer(0)
 
@@ -32,7 +32,7 @@ ball.up()
 
 # Target
 target = turtle.Turtle()
-target.shape("target2.gif")
+target.shape("target.gif")
 target.up()
 target.goto(290, 60)
 
