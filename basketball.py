@@ -2,6 +2,7 @@ import turtle
 import math
 import time
 import random
+import model
 
 # Window
 screen = turtle.Screen()
@@ -14,6 +15,7 @@ screen.tracer(0)
 # Variables
 shoot = False
 score = 0
+data_list = []
 
 start_x = random.randint(-200, 50) # ball start x position
 start_y = random.randint(-100, 0) # ball start y position
@@ -232,9 +234,14 @@ def interactions():
     speed_x *= -0.8
 
   if ball.distance(sensor) < 15:
+    # scoring
     if score_turtle.open : 
       score += 1
       score_turtle.open = False
+
+      # save to csv file
+      data_list.append([start_x, start_y, power, current_direction])
+      model.save_to_csv(data_list, "data.csv")
     score_turtle.clear()
     score_turtle.write("Score = " + str(score), font=("arial", 15, "bold"))
  
