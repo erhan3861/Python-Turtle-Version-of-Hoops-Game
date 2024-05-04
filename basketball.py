@@ -240,13 +240,11 @@ def interactions():
       score_turtle.open = False
 
       # save to csv file
-      data_list = [start_x, start_y, power, current_direction]
+      data_list = [start_x, start_y, round(power), round(current_direction)]
       mlmodel.save_to_csv(data_list, "data.csv")
     score_turtle.clear()
     score_turtle.write("Score = " + str(score), font=("arial", 15, "bold"))
  
-
-
 def reset_func():
   global x, y, shoot
 
