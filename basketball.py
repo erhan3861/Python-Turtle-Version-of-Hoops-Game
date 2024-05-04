@@ -3,13 +3,14 @@ import math
 import time
 import random
 import mlmodel
+import os
 
 # Window
 screen = turtle.Screen()
 screen.title("🏀 Basketball AI 🏀")
-screen.addshape("basketball.gif")
-screen.addshape("target.gif")
-screen.addshape("rim.gif")
+screen.addshape(os.path.join("images", "basketball.gif"))
+screen.addshape(os.path.join("images","target.gif"))
+screen.addshape(os.path.join("images", "rim.gif"))
 screen.tracer(0)
 
 # Variables
@@ -30,24 +31,24 @@ current_direction = 90
 # turtle objects
 # Ball
 ball = turtle.Turtle()
-ball.shape("basketball.gif")
+ball.shape(os.path.join("images", "basketball.gif"))
 ball.up()
 
 # Target
 target = turtle.Turtle()
-target.shape("target.gif")
+target.shape(os.path.join("images", "target.gif"))
 target.up()
 target.goto(290, 60)
 
 # Left rim
 left_rim = turtle.Turtle()
-left_rim.shape("rim.gif")
+left_rim.shape(os.path.join("images", "rim.gif"))
 left_rim.up()
 left_rim.goto(250, 35)
 
 # Right rim
 right_rim = turtle.Turtle()
-right_rim.shape("rim.gif")
+right_rim.shape(os.path.join("images", "rim.gif"))
 right_rim.up()
 right_rim.goto(310, 35)
 
