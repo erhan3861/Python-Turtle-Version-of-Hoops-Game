@@ -8,5 +8,6 @@ Game Controls :
 s key for shooting  
 r key for reset the shooting  
 n key for new shooting  
+m key for AI model prediction and shooting
 
 ![image](https://github.com/erhan3861/Python-Turtle-Version-of-Hoops-Game/assets/71086723/236bd093-de63-4ea3-84fd-2c390993e171)
