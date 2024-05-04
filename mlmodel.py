@@ -2,6 +2,7 @@ import csv
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
+import os
 
 
 # Function to collect input during the game
@@ -33,18 +34,19 @@ def train_model(data_file):
     rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
     rf_model.fit(X_train, y_train)
 
-    return rf_model, X_test, y_test
+    return rf_model
 
 
 def predict(model, X_test):
     # Make predictions on the test set
-    y_pred = model.predict(X_test)
+    y_pred = model.predict([X_test])
     return y_pred
 
 def save_to_csv(data_list, output_file):
     # Save predicted and actual values to a CSV file
-    with open(output_file, 'w', newline='') as file:
+    mode = "w"
+    if "data.csv" in os.listdir(): mode = "a"
+    with open(output_file, mode, newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(["x", "y", "power", "direction"])
-        for data in data_list:
-            writer.writerow(data)
+        if mode == "w": writer.writerow(["x", "y", "power", "direction"])
+        writer.writerow(data_list)

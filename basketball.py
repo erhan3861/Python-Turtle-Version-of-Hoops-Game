@@ -2,7 +2,7 @@ import turtle
 import math
 import time
 import random
-import model
+import mlmodel
 
 # Window
 screen = turtle.Screen()
@@ -15,7 +15,7 @@ screen.tracer(0)
 # Variables
 shoot = False
 score = 0
-data_list = []
+
 
 start_x = random.randint(-200, 50) # ball start x position
 start_y = random.randint(-100, 0) # ball start y position
@@ -240,8 +240,8 @@ def interactions():
       score_turtle.open = False
 
       # save to csv file
-      data_list.append([start_x, start_y, power, current_direction])
-      model.save_to_csv(data_list, "data.csv")
+      data_list = [start_x, start_y, power, current_direction]
+      mlmodel.save_to_csv(data_list, "data.csv")
     score_turtle.clear()
     score_turtle.write("Score = " + str(score), font=("arial", 15, "bold"))
  
@@ -283,6 +283,7 @@ screen.onkey(reset_func, "r")
 screen.onkey(shoot_func, "s")
 screen.onkey(new_shoot_func, "n")
 
+
 def show_distance(x,y):
   ball.setpos(x,y)
   # print(abs(ball.xcor()-backboard.xcor()), abs(ball.ycor()-backboard.ycor()) )
@@ -291,6 +292,20 @@ def show_distance(x,y):
   
 screen.onclick(show_distance, 3)
 
+def model_func():
+  global power, current_direction
+
+  model = mlmodel.train_model("data.csv")
+  result = mlmodel.predict(model, [start_x, start_y])
+  power = result[0][0]
+  current_direction = result[0][1]
+  print(power, current_direction)
+
+  # shooting
+  shoot_func()
+
+screen.onkey(model_func, "m")
+
 # Game loop
 while True:
   if shoot:
@@ -298,5 +313,7 @@ while True:
     interactions()
   time.sleep(0.05)
   screen.update()
+  if ball.ycor() < -250:
+    print(ball.distance(sensor))
   
 
