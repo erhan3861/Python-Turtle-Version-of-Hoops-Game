@@ -233,7 +233,7 @@ def interactions():
   if ball.xcor() > 300 or ball.xcor() < -300:
     speed_x *= -0.8
 
-  if ball.distance(sensor) < 15:
+  if ball.distance(sensor) < 18:
     # scoring
     if score_turtle.open : 
       score += 1
@@ -301,6 +301,13 @@ def model_func():
   current_direction = result[0][1]
   print(power, current_direction)
 
+  # new values
+  power_value.clear()
+  power_value.write("Power = " + str(round(power)), font=("arial", 15, "bold"))
+
+  direction_value.clear()
+  direction_value.write("Direction = " + str(round(current_direction)), font=("arial", 15, "bold"))
+
   # shooting
   shoot_func()
 
@@ -313,7 +320,5 @@ while True:
     interactions()
   time.sleep(0.05)
   screen.update()
-  if ball.ycor() < -250:
-    print(ball.distance(sensor))
   
 
