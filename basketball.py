@@ -13,6 +13,7 @@ screen.tracer(0)
 
 # Variables
 shoot = False
+score = 0
 
 start_x = random.randint(-200, 50) # ball start x position
 start_y = random.randint(-100, 0) # ball start y position
@@ -47,6 +48,20 @@ right_rim = turtle.Turtle()
 right_rim.shape("rim.gif")
 right_rim.up()
 right_rim.goto(310, 35)
+
+# Backboard
+backboard = turtle.Turtle()
+backboard.shape("circle")
+backboard.ht()
+backboard.up()
+backboard.goto(325, 90) # 110 sağ, 20 yukarı
+
+# Sensor
+sensor = turtle.Turtle()
+sensor.shape("square")
+sensor.ht()
+sensor.up()
+sensor.goto(280, 10) # 110 sağ, 20 yukarı
 
 
 # power contoller
@@ -138,6 +153,13 @@ def direction_turtle_drag(x,y):
 
 direction_turtle.ondrag(direction_turtle_drag)
 
+# Score writing
+score_turtle = direction_value.clone()
+score_turtle.open = False
+score_turtle.goto(90, 230)
+score_turtle.write("Score = 0" , font=("arial", 15, "bold"))
+
+
 def shoot_func():
   global shoot, current_direction, speed_x, speed_y
 
@@ -147,6 +169,8 @@ def shoot_func():
   print(speed_x, speed_y)
   shoot = True
   sign_turtle.ht()
+
+  score_turtle.open = True # for scoring once
 
 def movement():
   global speed_x, speed_y, x, y
@@ -169,37 +193,51 @@ def movement():
   ball.goto(x, y)
   
 def interactions():
-  global speed_x, speed_y
+  global speed_x, speed_y, score
 
-  if ball.xcor() > 300 or ball.xcor() < -300:
-    speed_x *= -0.8
-
-  if ball.distance(right_rim) < 25:
+  if ball.distance(right_rim) < 30:
     ball.seth(math.atan((speed_x / (speed_y + 0.001)) * 1) + (90 - ((speed_y / (abs(speed_y) + 0.001)) * 90)))
 
     a_vel = math.sqrt((speed_x * speed_x) + (speed_y * speed_y))
     
-    ball.right(2 * (90 + ((math.acos(((right_rim.ycor()-ball.ycor()) / ball.distance(right_rim))* 1)) * (((right_rim.xcor()-ball.xcor())+0.001) / (abs(right_rim.xcor()-ball.xcor())+0.001)))) - ball.heading())
+    ball.seth(2 * (90 + ((math.acos(((right_rim.ycor()-ball.ycor()) / ball.distance(right_rim))* 1)) * (((right_rim.xcor()-ball.xcor())+0.001) / (abs(right_rim.xcor()-ball.xcor())+0.001)))) - ball.heading())
 
     # ((math.acos((left_rim.ycor()-ball.ycor()) / ball.distance(left_rim))) * (((left_rim.xcor()-ball.xcor())+0.001) / (abs(left_rim.xcor()-ball.xcor())+0.001)))
 
     speed_x = (math.sin(ball.heading()) * a_vel) * 0.8
     speed_y = (math.cos(ball.heading()) * a_vel) * 0.8
     # if ball.distance(right_rim) < 15: return
+    return
 
 
-  if ball.distance(left_rim) < 25:
+  if ball.distance(left_rim) < 30:
       ball.seth(math.atan((speed_x / (speed_y + 0.001)) * 1) + (90 - ((speed_y / (abs(speed_y) + 0.001)) * 90)))
 
       a_vel = math.sqrt((speed_x * speed_x) + (speed_y * speed_y))
       
-      ball.right(2 * (90 + ((math.acos(((left_rim.ycor()-ball.ycor()) / ball.distance(left_rim))* 1)) * (((left_rim.xcor()-ball.xcor())+0.001) / (abs(left_rim.xcor()-ball.xcor())+0.001)))) - ball.heading())
+      ball.seth(2 * (90 + ((math.acos(((left_rim.ycor()-ball.ycor()) / ball.distance(left_rim))* 1)) * (((left_rim.xcor()-ball.xcor())+0.001) / (abs(left_rim.xcor()-ball.xcor())+0.001)))) - ball.heading())
 
       # ((math.acos((left_rim.ycor()-ball.ycor()) / ball.distance(left_rim))) * (((left_rim.xcor()-ball.xcor())+0.001) / (abs(left_rim.xcor()-ball.xcor())+0.001)))
 
       speed_x = (math.sin(ball.heading()) * a_vel) * 0.8
       speed_y = (math.cos(ball.heading()) * a_vel) * 0.8
+      return
       # if ball.distance(left_rim) < 15: return
+
+  if collision(ball, backboard):
+    speed_x = speed_x * -0.8
+    speed_y = speed_y * 0.9  
+
+  if ball.xcor() > 300 or ball.xcor() < -300:
+    speed_x *= -0.8
+
+  if ball.distance(sensor) < 15:
+    if score_turtle.open : 
+      score += 1
+      score_turtle.open = False
+    score_turtle.clear()
+    score_turtle.write("Score = " + str(score), font=("arial", 15, "bold"))
+ 
 
 
 def reset_func():
@@ -226,6 +264,11 @@ def new_shoot_func():
   sign_turtle.fd(10)
   sign_turtle.st()
 
+def collision(t1, t2):
+  # print(abs(t1.xcor()-t2.xcor()), abs(t1.ycor()-t2.ycor()) )
+  if abs(t1.xcor()-t2.xcor()) < 40 and abs(t1.ycor()-t2.ycor()) < 85:
+    # print("collision")
+    return True
 
 # Keyboard inputs
 screen.listen()
@@ -233,17 +276,13 @@ screen.onkey(reset_func, "r")
 screen.onkey(shoot_func, "s")
 screen.onkey(new_shoot_func, "n")
 
-
-
 def show_distance(x,y):
   ball.setpos(x,y)
-  print(ball.distance(left_rim), ball.distance(right_rim))
+  # print(abs(ball.xcor()-backboard.xcor()), abs(ball.ycor()-backboard.ycor()) )
+  print(ball.distance(sensor))
+  # print(ball.distance(left_rim), ball.distance(right_rim))
   
-
-
 screen.onclick(show_distance, 3)
-
-
 
 # Game loop
 while True:
