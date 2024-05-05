@@ -16,13 +16,10 @@ screen.tracer(0)
 # Variables
 shoot = False
 score = 0
-
-
 start_x = random.randint(-200, 50) # ball start x position
 start_y = random.randint(-100, 0) # ball start y position
 
 x, y = start_x, start_y # ball's game x and y position
-
 speed_x = 0
 speed_y = 0
 power = 1

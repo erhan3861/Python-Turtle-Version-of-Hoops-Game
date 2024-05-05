@@ -32,7 +32,7 @@ def train_model(data_file):
 
     # Create and train the Random Forest Regression model
     rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
-    rf_model.fit(X_train, y_train)
+    rf_model.fit(X_train.to_numpy(), y_train.to_numpy())
 
     return rf_model
 
